@@ -268,83 +268,6 @@
   }
   @keyframes spin{to{transform:rotate(360deg)}}
 
-  .divider{
-    display:flex;align-items:center;gap:14px;
-    color:var(--dim);
-    font-size:11px;font-weight:600;
-    letter-spacing:0.14em;text-transform:uppercase;
-    margin-top:4px;
-  }
-  .divider::before,.divider::after{
-    content:'';flex:1;height:1px;
-    background:linear-gradient(90deg, transparent, var(--stroke), transparent);
-  }
-
-  .fb-link-card{
-    padding:20px 22px;
-    display:flex;flex-direction:column;gap:12px;
-  }
-  .fb-link-head{
-    display:flex;align-items:center;gap:10px;
-  }
-  .fb-link-ico{
-    width:34px;height:34px;flex:none;
-    border-radius:10px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid var(--stroke);
-    display:flex;align-items:center;justify-content:center;
-    font-size:15px;color:var(--gray-300);
-  }
-  .fb-link-titles{flex:1;min-width:0}
-  .fb-link-title{
-    font-size:13.5px;font-weight:600;color:var(--white);
-    letter-spacing:-0.01em;
-  }
-  .fb-link-sub{
-    font-size:11.5px;color:var(--dim);font-weight:500;
-    letter-spacing:-0.005em;margin-top:2px;
-  }
-
-  .url-box{
-    display:flex;align-items:center;gap:8px;
-    background:rgba(0,0,0,0.5);
-    border:1px solid var(--stroke);
-    border-radius:11px;
-    padding:8px 8px 8px 14px;
-    transition:border-color .3s var(--ease-out);
-  }
-  .url-box:hover{border-color:var(--stroke-strong)}
-  .url-text{
-    flex:1;min-width:0;
-    font-family:'SF Mono',ui-monospace,Menlo,monospace;
-    font-size:12px;
-    color:var(--gray-300);
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    letter-spacing:0;
-    user-select:all;
-  }
-  .url-copy{
-    flex:none;
-    font:inherit;font-size:12px;font-weight:600;
-    letter-spacing:-0.005em;
-    padding:7px 12px;border-radius:8px;
-    background:rgba(255,255,255,0.08);
-    border:1px solid var(--stroke);
-    color:var(--text);cursor:pointer;
-    display:inline-flex;align-items:center;gap:6px;
-    transition:
-      background .25s var(--ease-out),
-      border-color .25s var(--ease-out),
-      transform .2s var(--ease-apple);
-  }
-  .url-copy:hover{background:rgba(255,255,255,0.14);border-color:var(--stroke-strong)}
-  .url-copy:active{transform:scale(.94)}
-  .url-copy.ok{
-    background:rgba(74,222,128,0.14);
-    border-color:rgba(74,222,128,0.4);
-    color:var(--success);
-  }
-
   .toast{
     position:fixed;
     left:50%;bottom:24px;
@@ -430,10 +353,6 @@
     .hero h1{font-size:26px}
     .hero p{font-size:14.5px}
     .fb-card{padding:22px 18px 18px;gap:16px}
-    .fb-link-card{padding:16px 18px}
-    .url-text{font-size:11px}
-    .url-copy span.txt{display:none}
-    .url-copy{padding:7px 10px}
     .type-chip{font-size:12px;padding:8px 12px}
     .toast{bottom:16px;font-size:13px;padding:11px 15px}
   }
@@ -553,37 +472,6 @@
 
   </section>
 
-  <div class="divider">link de feedback</div>
-
-  <section class="glass-card fb-link-card" aria-label="Link da página">
-    <div class="fb-link-head">
-      <div class="fb-link-ico">🔗</div>
-      <div class="fb-link-titles">
-        <div class="fb-link-title">Link desta página</div>
-        <div class="fb-link-sub">Copie e envie para quem quiser dar feedback</div>
-      </div>
-    </div>
-
-    <div class="url-box">
-      <span class="url-text" id="urlText" title="Link da página">Carregando…</span>
-      <button type="button" class="url-copy" id="urlCopy" title="Copiar link">
-        <span>⧉</span><span class="txt">Copiar</span>
-      </button>
-    </div>
-
-    <a
-      id="openFeedbackLink"
-      class="btn"
-      href="#"
-      target="_blank"
-      rel="noopener"
-      style="font-size:13px;padding:12px"
-    >
-      <span class="ico">↗</span>
-      Abrir link de feedback em nova aba
-    </a>
-  </section>
-
   <footer class="foot">
     Feedback enviado diretamente para o <a href="https://capimmshare.lovable.app/" target="_blank" rel="noopener">CapimmShare</a>.<br>
     Sem intermediários, sem armazenamento local.
@@ -605,6 +493,9 @@
      ============================================================ */
   const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1554299325507444737/w7MOm_XikPIHIlGd3g8c5j6QlFqO5GSzs3Pds7BxzQRi0WsrVFJ6aU9-agq-rgDDUzJt';
 
+  /* Emoji separador */
+  const EMOJI_SEPARADOR = 'https://cdn3.emoji.gg/emojis/27378-separador.png';
+
   /* ============================================================
      REFS
      ============================================================ */
@@ -618,10 +509,6 @@
   const submitLbl = document.getElementById('fbSubmitLabel');
   const successBox= document.getElementById('successBox');
   const againBtn  = document.getElementById('fbAgain');
-
-  const urlText   = document.getElementById('urlText');
-  const urlCopy   = document.getElementById('urlCopy');
-  const openLink  = document.getElementById('openFeedbackLink');
 
   const toast     = document.getElementById('toast');
   const toastMsg  = document.getElementById('toastMsg');
@@ -651,7 +538,7 @@
   });
 
   /* ============================================================
-     CONTADOR DE CARACTERES
+     CONTADOR
      ============================================================ */
   function atualizarContador(){
     const len = textarea.value.length;
@@ -663,95 +550,48 @@
   atualizarContador();
 
   /* ============================================================
-     PAYLOAD — DISCORD COMPONENTS V2
-     ------------------------------------------------------------
-     Estrutura pedida:
-       1. Nome
-       2. Tipo
-       3. Contato
-       ── separador ──
-       4. Mensagem  (destacada no meio)
-       ── separador ──
-       5. Link       (embaixo)
+     DADOS DO FORMULÁRIO
      ============================================================ */
+  function coletarDados(){
+    return {
+      nome:    (inputNome.value.trim() || 'Anônimo').slice(0, 60),
+      contato: inputCont.value.trim() || 'não informado',
+      tipo:    tipoAtual,
+      msg:     textarea.value.trim(),
+      url:     window.location.href
+    };
+  }
 
-  // Tipos de componente do Discord V2
-  const C = {
-    CONTAINER: 17,
-    TEXT:      10,
-    SEPARATOR: 14
-  };
-
-  // Flag obrigatória para usar Components V2 em webhooks
+  /* ============================================================
+     PAYLOAD 1 — DISCORD COMPONENTS V2
+     ------------------------------------------------------------
+     ⚠️  Com V2 NÃO se pode enviar: username, avatar_url, content,
+        embeds, tts. Somente "flags" + "components".
+     ============================================================ */
+  const C = { CONTAINER: 17, TEXT: 10, SEPARATOR: 14 };
   const FLAG_IS_COMPONENTS_V2 = 1 << 15; // 32768
 
-  function montarPayload(){
-    const nome    = (inputNome.value.trim() || 'Anônimo').slice(0, 60);
-    const contato = inputCont.value.trim() || 'não informado';
-    const msg     = textarea.value.trim();
-    const urlAtual = window.location.href;
-
-    // Cor PRETA (0x000000) — accent do container
-    const PRETO = 0x000000;
-
+  function payloadV2(d){
     return {
-      username: 'CapimmShare · Feedback',
-      avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
       flags: FLAG_IS_COMPONENTS_V2,
       components: [
         {
           type: C.CONTAINER,
-          accent_color: PRETO,
+          accent_color: 0x000000, // PRETO
           components: [
-            // Título
-            {
-              type: C.TEXT,
-              content: '## 📨 Novo feedback recebido'
-            },
+            { type: C.TEXT, content: '## 📨 Novo feedback recebido' },
 
-            // ── 1. Nome ──
-            {
-              type: C.TEXT,
-              content: `**1. Nome**\n${nome}`
-            },
+            { type: C.TEXT, content: `**1. Nome**\n${d.nome}` },
+            { type: C.TEXT, content: `**2. Tipo**\n${d.tipo}` },
+            { type: C.TEXT, content: `**3. Contato**\n${d.contato}` },
 
-            // ── 2. Tipo ──
-            {
-              type: C.TEXT,
-              content: `**2. Tipo**\n${tipoAtual}`
-            },
+            { type: C.SEPARATOR, divider: true, spacing: 2 },
 
-            // ── 3. Contato ──
-            {
-              type: C.TEXT,
-              content: `**3. Contato**\n${contato}`
-            },
+            { type: C.TEXT, content: `### 💬 4. Mensagem\n>>> ${d.msg}` },
 
-            // ───── Separador antes da mensagem ─────
-            {
-              type: C.SEPARATOR,
-              divider: true,
-              spacing: 2
-            },
+            { type: C.SEPARATOR, divider: true, spacing: 2 },
 
-            // ── 4. Mensagem (destacada) ──
-            {
-              type: C.TEXT,
-              content: `### 💬 4. Mensagem\n>>> ${msg}`
-            },
-
-            // ───── Separador depois da mensagem ─────
-            {
-              type: C.SEPARATOR,
-              divider: true,
-              spacing: 2
-            },
-
-            // ── 5. Link (embaixo) ──
-            {
-              type: C.TEXT,
-              content: `**5. Link**\n${urlAtual}`
-            }
+            { type: C.TEXT, content: `**5. Link**\n${d.url}` }
           ]
         }
       ]
@@ -759,11 +599,69 @@
   }
 
   /* ============================================================
-     ENVIO PARA O WEBHOOK DO DISCORD
+     PAYLOAD 2 — EMBED CLÁSSICO (fallback)
+     ------------------------------------------------------------
+     Usa o emoji separador como campo entre as seções.
      ============================================================ */
+  function payloadEmbed(d){
+    return {
+      username: 'CapimmShare · Feedback',
+      avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
+      embeds: [
+        {
+          title: '📨 Novo feedback recebido',
+          color: 0x000000, // PRETO
+          fields: [
+            { name: '1. Nome',    value: d.nome,    inline: true  },
+            { name: '2. Tipo',    value: d.tipo,    inline: true  },
+            { name: '3. Contato', value: d.contato, inline: false },
+
+            /* Separador via emoji (inline: false para ocupar a linha inteira) */
+            { name: '\u200b', value: `[ㅤ](${EMOJI_SEPARADOR})`, inline: false },
+
+            { name: '💬 4. Mensagem', value: '>>> ' + d.msg, inline: false },
+
+            /* Separador via emoji */
+            { name: '\u200b', value: `[ㅤ](${EMOJI_SEPARADOR})`, inline: false },
+
+            { name: '5. Link',    value: d.url,     inline: false }
+          ],
+          timestamp: new Date().toISOString(),
+          footer: { text: 'CapimmShare · Formulário de feedback' }
+        }
+      ]
+    };
+  }
+
+  /* ============================================================
+     ENVIO — tenta V2, cai pro embed clássico se falhar
+     ============================================================ */
+  async function postar(payload){
+    const res = await fetch(DISCORD_WEBHOOK + '?wait=true', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok){
+      let detalhe = '';
+      try {
+        const j = await res.json();
+        detalhe = j.message || JSON.stringify(j.errors || j) || '';
+      } catch (_) {
+        detalhe = await res.text().catch(() => '');
+      }
+      const err = new Error('HTTP ' + res.status + (detalhe ? ' — ' + detalhe : ''));
+      err.status = res.status;
+      throw err;
+    }
+    return res;
+  }
+
   async function enviarFeedback(){
-    const msg = textarea.value.trim();
-    if (msg.length < 3){
+    const dados = coletarDados();
+
+    if (dados.msg.length < 3){
       showToast('Escreva um pouco mais antes de enviar 😅', 'err');
       textarea.focus();
       return;
@@ -776,29 +674,37 @@
     const iconBackup = oldIco ? oldIco.outerHTML : '';
     if (oldIco) oldIco.outerHTML = '<span class="spinner"></span>';
 
+    let enviado = false;
+
     try {
-      const res = await fetch(DISCORD_WEBHOOK, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(montarPayload())
-      });
+      await postar(payloadV2(dados));
+      enviado = true;
+      console.log('[feedback] enviado via Components V2 ✅');
+    } catch (e1){
+      console.warn('[feedback] V2 falhou:', e1.message);
+    }
 
-      if (!res.ok){
-        const txt = await res.text().catch(() => '');
-        throw new Error('HTTP ' + res.status + (txt ? ' — ' + txt : ''));
+    if (!enviado){
+      try {
+        await postar(payloadEmbed(dados));
+        enviado = true;
+        console.log('[feedback] enviado via embed clássico ✅');
+      } catch (e2){
+        console.error('[feedback] embed clássico também falhou:', e2.message);
       }
+    }
 
+    submitBtn.disabled = false;
+    submitLbl.textContent = originalLabel;
+    const sp = submitBtn.querySelector('.spinner');
+    if (sp && iconBackup) sp.outerHTML = iconBackup;
+
+    if (enviado){
       form.classList.add('hidden');
       successBox.classList.add('show');
       showToast('Feedback enviado com sucesso 💚', 'ok');
-    } catch (err){
-      console.error('Erro ao enviar feedback:', err);
-      showToast('Não foi possível enviar. Tente novamente.', 'err');
-    } finally {
-      submitBtn.disabled = false;
-      submitLbl.textContent = originalLabel;
-      const sp = submitBtn.querySelector('.spinner');
-      if (sp && iconBackup) sp.outerHTML = iconBackup;
+    } else {
+      showToast('Não foi possível enviar. Verifique o webhook.', 'err');
     }
   }
 
@@ -815,52 +721,6 @@
     successBox.classList.remove('show');
     form.classList.remove('hidden');
     inputNome.focus({ preventScroll: true });
-  });
-
-  /* ============================================================
-     LINK DA PÁGINA (pega automaticamente)
-     ============================================================ */
-  function atualizarLink(){
-    const href = window.location.href;
-    urlText.textContent = href;
-    urlText.title = href;
-    openLink.href = href;
-  }
-  atualizarLink();
-  window.addEventListener('popstate', atualizarLink);
-  window.addEventListener('hashchange', atualizarLink);
-
-  urlCopy.addEventListener('click', async () => {
-    const href = window.location.href;
-    let ok = true;
-    try {
-      await navigator.clipboard.writeText(href);
-    } catch (_) {
-      const ta = document.createElement('textarea');
-      ta.value = href;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); }
-      catch (_) { ok = false; }
-      ta.remove();
-    }
-
-    if (ok){
-      urlCopy.classList.add('ok');
-      const span = urlCopy.querySelector('.txt');
-      const orig = span ? span.textContent : '';
-      if (span) span.textContent = 'Copiado';
-      showToast('Link copiado para a área de transferência', 'ok');
-      clearTimeout(urlCopy._t);
-      urlCopy._t = setTimeout(() => {
-        urlCopy.classList.remove('ok');
-        if (span) span.textContent = orig || 'Copiar';
-      }, 1800);
-    } else {
-      showToast('Não foi possível copiar o link', 'err');
-    }
   });
 
 })();
