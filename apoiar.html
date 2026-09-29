@@ -4,463 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CapimmShare — Apoiar o projeto</title>
-<style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-  :root{
-    --black:#000;
-    --gray-900:#111;
-    --gray-800:#1c1c1e;
-    --gray-700:#2c2c2e;
-    --gray-600:#3a3a3c;
-    --gray-500:#545456;
-    --gray-400:#8e8e93;
-    --gray-300:#c7c7cc;
-    --gray-200:#e5e5ea;
-    --white:#fff;
-
-    --text:#f5f5f7;
-    --muted:#8e8e93;
-    --dim:#636366;
-
-    --stroke:rgba(255,255,255,0.08);
-    --stroke-strong:rgba(255,255,255,0.16);
-
-    --ease-out:cubic-bezier(0.16,1,0.3,1);
-    --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
-    --ease-apple:cubic-bezier(0.32,0.72,0,1);
-    --ease-smooth:cubic-bezier(0.4,0,0.2,1);
-  }
-
-  html,body{height:100%}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter','Segoe UI',Roboto,sans-serif;
-    color:var(--text);
-    background:var(--black);
-    min-height:100dvh;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    letter-spacing:-0.011em;
-    overflow-x:hidden;
-    position:relative;
-  }
-
-  /* =========================================================
-     AMBIENTE (mesmo gradiente animado)
-     ========================================================= */
-  body::before{
-    content:'';
-    position:fixed;inset:-20%;
-    background:
-      radial-gradient(900px 620px at 18% -12%, rgba(255,255,255,0.09), transparent 62%),
-      radial-gradient(760px 540px at 88% 4%, rgba(255,255,255,0.05), transparent 58%),
-      radial-gradient(900px 700px at 50% 118%, rgba(255,255,255,0.035), transparent 60%);
-    pointer-events:none;z-index:0;
-    animation:ambient 24s var(--ease-smooth) infinite alternate;
-  }
-  @keyframes ambient{
-    0%{transform:translate3d(0,0,0) scale(1);opacity:1}
-    100%{transform:translate3d(0,-2.5%,0) scale(1.05);opacity:.85}
-  }
-
-  /* =========================================================
-     PÁGINA
-     ========================================================= */
-  .page{
-    position:relative;z-index:1;
-    min-height:100dvh;
-    display:flex;flex-direction:column;
-    align-items:center;
-    padding:72px 20px 48px;
-    gap:20px;
-    max-width:720px;margin:0 auto;width:100%;
-  }
-
-  /* Entrada escalonada */
-  .page > *{animation:rise .9s var(--ease-out) both}
-  .page > *:nth-child(1){animation-delay:.05s}
-  .page > *:nth-child(2){animation-delay:.15s}
-  .page > *:nth-child(3){animation-delay:.25s}
-  .page > *:nth-child(4){animation-delay:.35s}
-  @keyframes rise{
-    from{opacity:0;transform:translateY(16px)}
-    to{opacity:1;transform:translateY(0)}
-  }
-
-  /* =========================================================
-     HERO
-     ========================================================= */
-  .hero{
-    text-align:center;display:flex;flex-direction:column;
-    gap:14px;max-width:560px;margin-bottom:4px;
-  }
-  .hero h1{
-    font-size:clamp(28px,5vw,44px);font-weight:700;
-    letter-spacing:-0.035em;line-height:1.05;
-    display:flex;align-items:center;justify-content:center;gap:12px;
-    background:linear-gradient(180deg,#ffffff 0%,#a8a8ad 100%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
-  }
-  .hero h1 .dot{
-    width:10px;height:10px;border-radius:50%;background:var(--white);
-    animation:glowPulse 2.6s var(--ease-smooth) infinite;flex:none;
-  }
-  @keyframes glowPulse{
-    0%{box-shadow:0 0 0 0 rgba(255,255,255,0.35)}
-    70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}
-    100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
-  }
-  .hero p{
-    color:var(--muted);font-size:15.5px;line-height:1.6;
-    letter-spacing:-0.005em;
-  }
-  .hero p strong{color:var(--text);font-weight:600}
-
-  /* =========================================================
-     GLASS CARD
-     ========================================================= */
-  .glass-card{
-    width:100%;
-    background:linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
-    border:1px solid var(--stroke);
-    border-radius:22px;
-    backdrop-filter:blur(40px) saturate(140%);
-    -webkit-backdrop-filter:blur(40px) saturate(140%);
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.06) inset,
-      0 30px 70px -34px rgba(0,0,0,0.95),
-      0 10px 30px -18px rgba(0,0,0,0.8);
-  }
-
-  /* =========================================================
-     CARD DE DOAÇÃO
-     ========================================================= */
-  .donate-card{
-    padding:32px 28px 28px;
-    display:flex;flex-direction:column;align-items:center;
-    gap:22px;
-    text-align:center;
-  }
-
-  .donate-emoji{
-    font-size:44px;line-height:1;
-    animation:heartbeat 2.4s var(--ease-spring) infinite;
-    display:inline-block;
-  }
-  @keyframes heartbeat{
-    0%,100%{transform:scale(1)}
-    14%{transform:scale(1.12)}
-    28%{transform:scale(1)}
-    42%{transform:scale(1.08)}
-    56%{transform:scale(1)}
-  }
-
-  .donate-title{
-    font-size:19px;font-weight:700;
-    letter-spacing:-0.02em;color:var(--white);
-  }
-  .donate-text{
-    font-size:14.5px;line-height:1.65;color:var(--muted);
-    letter-spacing:-0.005em;max-width:460px;
-  }
-  .donate-text strong{color:var(--text);font-weight:600}
-
-  /* QR Code */
-  .qr-frame{
-    width:220px;height:220px;
-    padding:14px;
-    background:var(--white);
-    border-radius:18px;
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.9) inset,
-      0 18px 40px -18px rgba(0,0,0,0.9),
-      0 6px 16px -8px rgba(0,0,0,0.7);
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .5s var(--ease-apple), box-shadow .5s var(--ease-out);
-    position:relative;
-  }
-  .qr-frame:hover{
-    transform:translateY(-4px) scale(1.02);
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.9) inset,
-      0 26px 60px -20px rgba(0,0,0,0.95),
-      0 10px 24px -10px rgba(0,0,0,0.8);
-  }
-  .qr-frame img{
-    width:100%;height:100%;
-    display:block;border-radius:6px;
-    image-rendering:pixelated;
-  }
-
-  .qr-hint{
-    font-size:12.5px;color:var(--dim);
-    letter-spacing:-0.005em;
-    display:flex;align-items:center;gap:6px;
-  }
-  .qr-hint::before,
-  .qr-hint::after{
-    content:'';flex:0 0 24px;height:1px;
-    background:linear-gradient(90deg,transparent,var(--stroke-strong),transparent);
-  }
-
-  /* Divisor "ou" */
-  .divider{
-    display:flex;align-items:center;gap:14px;
-    width:100%;max-width:340px;
-    color:var(--dim);
-    font-size:11px;font-weight:600;
-    letter-spacing:0.14em;text-transform:uppercase;
-  }
-  .divider::before,
-  .divider::after{
-    content:'';flex:1;height:1px;
-    background:linear-gradient(90deg, transparent, var(--stroke), transparent);
-  }
-
-  /* =========================================================
-     BOTÕES
-     ========================================================= */
-  .btn{
-    font:inherit;font-weight:600;font-size:14px;letter-spacing:-0.01em;
-    border:1px solid transparent;border-radius:12px;
-    padding:14px 22px;cursor:pointer;
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    color:var(--text);background:rgba(255,255,255,0.08);border-color:var(--stroke);
-    white-space:nowrap;-webkit-tap-highlight-color:transparent;
-    text-decoration:none;
-    transition:
-      transform .3s var(--ease-apple),
-      background .3s var(--ease-out),
-      box-shadow .3s var(--ease-out),
-      color .3s var(--ease-out),
-      border-color .3s var(--ease-out);
-  }
-  .btn:hover{background:rgba(255,255,255,0.12);border-color:var(--stroke-strong)}
-  .btn:active{transform:scale(.965)}
-  .btn:focus-visible{outline:2px solid rgba(255,255,255,0.4);outline-offset:2px}
-
-  .btn-primary{
-    background:linear-gradient(180deg,#ffffff 0%,#d6d6db 100%);
-    color:#000;border-color:transparent;
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.9) inset,
-      0 12px 30px -12px rgba(255,255,255,0.22),
-      0 4px 12px -6px rgba(0,0,0,0.7);
-  }
-  .btn-primary:hover{
-    background:linear-gradient(180deg,#ffffff 0%,#e8e8ed 100%);
-    box-shadow:
-      0 1px 0 0 rgba(255,255,255,0.9) inset,
-      0 16px 40px -14px rgba(255,255,255,0.28),
-      0 6px 16px -8px rgba(0,0,0,0.8);
-  }
-  .btn-lg{width:100%;max-width:340px;padding:16px;font-size:15.5px;border-radius:14px}
-
-  .btn-ghost{
-    background:rgba(255,255,255,0.05);
-    border-color:var(--stroke);
-    font-size:13px;padding:11px 18px;
-  }
-  .btn-ghost:hover{background:rgba(255,255,255,0.09)}
-
-  .btn .ico{
-    font-size:15px;line-height:1;
-    transition:transform .4s var(--ease-spring);
-  }
-  .btn:hover .ico{transform:scale(1.15) rotate(-6deg)}
-
-  /* =========================================================
-     GRID DE VALORES SUGERIDOS
-     ========================================================= */
-  .amounts{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
-    width:100%;max-width:400px;
-  }
-  .amount-chip{
-    font:inherit;font-size:13px;font-weight:600;
-    letter-spacing:-0.005em;
-    padding:9px 16px;border-radius:999px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid var(--stroke);
-    color:var(--muted);cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-    text-decoration:none;
-    transition:
-      background .3s var(--ease-out),
-      border-color .3s var(--ease-out),
-      color .3s var(--ease-out),
-      transform .3s var(--ease-apple);
-  }
-  .amount-chip:hover{
-    background:rgba(255,255,255,0.1);
-    border-color:var(--stroke-strong);
-    color:var(--text);
-    transform:translateY(-2px);
-  }
-  .amount-chip:active{transform:translateY(0) scale(.96)}
-
-  /* =========================================================
-     FOOTER
-     ========================================================= */
-  .foot{
-    width:100%;text-align:center;
-    color:var(--dim);font-size:12px;line-height:1.75;
-    padding:8px 4px 0;margin-top:8px;
-  }
-  .foot a{
-    color:var(--muted);text-decoration:none;
-    transition:color .2s var(--ease-out);
-  }
-  .foot a:hover{color:var(--text)}
-
-  .foot .heart{
-    color:var(--gray-500);
-    animation:heartbeat 2.4s var(--ease-spring) infinite;
-    display:inline-block;
-    vertical-align:-1px;
-  }
-
-  /* =========================================================
-     RESPONSIVO
-     ========================================================= */
-  @media (max-width:520px){
-    .page{padding:48px 16px 32px;gap:16px}
-    .hero h1{font-size:26px}
-    .hero p{font-size:14.5px}
-    .donate-card{padding:26px 20px 22px;gap:18px}
-    .qr-frame{width:190px;height:190px;padding:12px}
-    .donate-emoji{font-size:38px}
-  }
-
-  @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{
-      animation-duration:.001ms !important;
-      transition-duration:.001ms !important;
-    }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="page">
+    <header class="hero">
+      <h1><span class="dot"></span>Apoiar</h1>
+      <p>O CapimmShare é <strong>gratuito e sem anúncios</strong>. Se ele te ajuda, você pode ajudar a manter os servidores de sinalização no ar.</p>
+    </header>
 
-<main class="page">
+    <section class="glass-card info-card">
+      <h2>Por que apoiar?</h2>
+      <p>Cada doação vai direto para os custos de hospedagem do servidor de <strong>sinalização WebRTC</strong>, domínio e desenvolvimento contínuo. Nenhum valor é usado para anúncios ou rastreamento.</p>
+    </section>
 
-  <!-- HERO -->
-  <header class="hero">
-    <h1><span class="dot"></span> Apoiar o CapimmShare</h1>
-    <p>O CapimmShare é <strong>100% gratuito</strong> e sem anúncios. Se ele te ajudou de alguma forma, considere fazer uma doação para manter o projeto vivo.</p>
-  </header>
+    <section class="glass-card rules-card">
+      <div class="rule-item">
+        <div class="rule-num">💜</div>
+        <div class="rule-content">
+          <h3>Pix</h3>
+          <p>Doação única ou recorrente via Pix. Chave disponível na página oficial do projeto.</p>
+        </div>
+      </div>
 
-  <!-- CARD DE DOAÇÃO -->
-  <section class="glass-card donate-card" aria-label="Apoiar o criador">
+      <div class="rule-item">
+        <div class="rule-num">☕</div>
+        <div class="rule-content">
+          <h3>Buy me a coffee</h3>
+          <p>Se preferir plataformas internacionais, apoie através do Buy Me a Coffee ou Ko-fi.</p>
+        </div>
+      </div>
 
-    <span class="donate-emoji" aria-hidden="true">💚</span>
+      <div class="rule-item">
+        <div class="rule-num">⭐</div>
+        <div class="rule-content">
+          <h3>GitHub</h3>
+          <p>Deixar uma estrela no repositório também ajuda muito — e é de graça!</p>
+        </div>
+      </div>
 
-    <div>
-      <h2 class="donate-title">Ajude o criador a manter o projeto no ar</h2>
-      <p class="donate-text" style="margin-top:8px">
-        Cada contribuição ajuda a cobrir os custos de hospedagem, domínio e desenvolvimento de novas funcionalidades. <strong>Qualquer valor é bem-vindo!</strong>
-      </p>
-    </div>
+      <div class="rule-item">
+        <div class="rule-num">📣</div>
+        <div class="rule-content">
+          <h3>Compartilhar</h3>
+          <p>Divulgar o CapimmShare para quem precisa é a forma mais valiosa de apoio.</p>
+        </div>
+      </div>
+    </section>
 
-    <!-- QR Code Pix / Nubank -->
-    <div class="qr-frame" aria-label="QR Code para doação via Nubank">
-      <img
-        src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fnubank.com.br%2Fcobrar%2F7c4vss%2F6ab88395-e755-4bbb-9c16-ff01f8317d6e"
-        alt="QR Code para doação via Nubank"
-        width="400"
-        height="400"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-      >
-    </div>
+    <a href="https://capimmm.github.io/CapimmShare/" class="back-btn">← Voltar ao início</a>
 
-    <span class="qr-hint">Aponte a câmera do seu banco</span>
+    <p class="footer-note">Obrigado por ajudar a manter o projeto vivo 💜</p>
+  </main>
 
-    <!-- Divisor -->
-    <div class="divider">ou</div>
-
-    <!-- Botão principal — link direto Nubank -->
-    <a
-      class="btn btn-primary btn-lg"
-      href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e"
-      target="_blank"
-      rel="noopener"
-    >
-      <span class="ico">💳</span>
-      Doar via Nubank
-    </a>
-
-    <!-- Valores sugeridos -->
-    <div class="amounts" aria-label="Valores sugeridos">
-      <a class="amount-chip" href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e" target="_blank" rel="noopener">R$ 5</a>
-      <a class="amount-chip" href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e" target="_blank" rel="noopener">R$ 10</a>
-      <a class="amount-chip" href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e" target="_blank" rel="noopener">R$ 25</a>
-      <a class="amount-chip" href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e" target="_blank" rel="noopener">R$ 50</a>
-      <a class="amount-chip" href="https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e" target="_blank" rel="noopener">Outro valor</a>
-    </div>
-
-    <!-- Botão secundário — copiar link -->
-    <button class="btn btn-ghost" type="button" id="btnCopiar">
-      <span class="ico">⧉</span>
-      <span id="btnCopiarLabel">Copiar link de doação</span>
-    </button>
-
-  </section>
-
-  <!-- MENSAGEM DE AGRADECIMENTO -->
-  <section class="glass-card" style="padding:24px 26px;text-align:center">
-    <p style="font-size:14.5px;line-height:1.7;color:var(--muted);letter-spacing:-0.005em">
-      Muito obrigado por considerar apoiar o projeto. <span class="heart">💚</span><br>
-      Sua contribuição faz toda a diferença — e mantém o CapimmShare gratuito para todo mundo.
-    </p>
-  </section>
-
-  <!-- RODAPÉ -->
-  <footer class="foot">
-    Página de apoio ao <a href="https://capimmshare.lovable.app/" target="_blank" rel="noopener">CapimmShare</a>.<br>
-    Doação processada com segurança via Nubank.
-  </footer>
-
-</main>
-
-<script>
-(function(){
-  'use strict';
-
-  const DONATE_URL = 'https://nubank.com.br/cobrar/7c4vss/6ab88395-e755-4bbb-9c16-ff01f8317d6e';
-
-  const btn = document.getElementById('btnCopiar');
-  const label = document.getElementById('btnCopiarLabel');
-  const original = label.textContent;
-
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(DONATE_URL);
-    } catch (_) {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = DONATE_URL;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (_) {}
-      ta.remove();
-    }
-
-    label.textContent = '✓ Link copiado!';
-    btn.style.borderColor = 'rgba(255,255,255,0.25)';
-
-    clearTimeout(btn._t);
-    btn._t = setTimeout(() => {
-      label.textContent = original;
-      btn.style.borderColor = '';
-    }, 1800);
-  });
-
-})();
-</script>
-
+  <script src="navbar.js" defer></script>
 </body>
 </html>
