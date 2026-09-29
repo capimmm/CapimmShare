@@ -359,7 +359,7 @@
      ============================================================ */
   const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1554299325507444737/w7MOm_XikPIHIlGd3g8c5j6QlFqO5GSzs3Pds7BxzQRi0WsrVFJ6aU9-agq-rgDDUzJt';
 
-  /* Emoji separador customizado (precisa estar no servidor do webhook) */
+  /* Emoji separador customizado (precisa existir no servidor do webhook) */
   const EMOJI_SEPARADOR = '<:separador:1554305263555842088>';
 
   /* ============================================================
@@ -429,6 +429,10 @@
 
   /* ============================================================
      PAYLOAD V2 — Components V2
+     ------------------------------------------------------------
+     - Campos 1/2/3 mantêm espaçamento natural
+     - Mensagem logo após o separador, SEM título "4. Mensagem"
+     - Separador spacing: 1 (compacto) para o bloco da mensagem
      ============================================================ */
   const C = { CONTAINER: 17, TEXT: 10, SEPARATOR: 14 };
   const FLAG_IS_COMPONENTS_V2 = 1 << 15;
@@ -442,12 +446,22 @@
           accent_color: 0x000000,
           components: [
             { type: C.TEXT, content: '## Novo feedback recebido' },
+
+            /* Bloco dos campos 1/2/3 — espaçamento normal */
             { type: C.TEXT, content: `**1. Nome**\n${d.nome}` },
             { type: C.TEXT, content: `**2. Tipo**\n${d.tipo}` },
             { type: C.TEXT, content: `**3. Contato**\n${d.contato}` },
-            { type: C.SEPARATOR, divider: true, spacing: 2 },
-            { type: C.TEXT, content: `### 4. Mensagem\n>>> ${d.msg}` },
-            { type: C.SEPARATOR, divider: true, spacing: 2 },
+
+            /* Separador compacto antes da mensagem */
+            { type: C.SEPARATOR, divider: true, spacing: 1 },
+
+            /* Mensagem — sem título, o separador já faz o trabalho */
+            { type: C.TEXT, content: `>>> ${d.msg}` },
+
+            /* Separador compacto depois da mensagem */
+            { type: C.SEPARATOR, divider: true, spacing: 1 },
+
+            /* Link embaixo */
             { type: C.TEXT, content: `**5. Link**\n${d.url}` }
           ]
         }
@@ -456,7 +470,10 @@
   }
 
   /* ============================================================
-     PAYLOAD EMBED (fallback) — usa emoji customizado como separador
+     PAYLOAD EMBED — fallback
+     ------------------------------------------------------------
+     - Mensagem sem rótulo, apenas após o emoji separador
+     - Campos 1/2/3 mantêm o espaçamento padrão dos fields
      ============================================================ */
   function payloadEmbed(d){
     return {
@@ -470,9 +487,16 @@
             { name: '1. Nome',    value: d.nome,    inline: true  },
             { name: '2. Tipo',    value: d.tipo,    inline: true  },
             { name: '3. Contato', value: d.contato, inline: false },
+
+            /* Emoji separador */
             { name: '\u200b', value: EMOJI_SEPARADOR, inline: false },
-            { name: '4. Mensagem', value: '>>> ' + d.msg, inline: false },
+
+            /* Mensagem sem rótulo — o emoji já separa */
+            { name: '\u200b', value: '>>> ' + d.msg, inline: false },
+
+            /* Emoji separador */
             { name: '\u200b', value: EMOJI_SEPARADOR, inline: false },
+
             { name: '5. Link', value: d.url, inline: false }
           ],
           timestamp: new Date().toISOString(),
@@ -483,7 +507,7 @@
   }
 
   /* ============================================================
-     ENVIO — tenta V2, cai pro embed clássico
+     ENVIO
      ============================================================ */
   async function postar(payload){
     const res = await fetch(DISCORD_WEBHOOK + '?wait=true', {
