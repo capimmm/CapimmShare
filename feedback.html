@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CapimmShare — Enviar feedback</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --black:#000;
+    --gray-900:#111;
+    --gray-800:#1c1c1e;
+    --gray-700:#2c2c2e;
+    --gray-600:#3a3a3c;
+    --gray-500:#545456;
+    --gray-400:#8e8e93;
+    --gray-300:#c7c7cc;
+    --gray-200:#e5e5ea;
+    --white:#fff;
+
+    --text:#f5f5f7;
+    --muted:#8e8e93;
+    --dim:#636366;
+
+    --stroke:rgba(255,255,255,0.08);
+    --stroke-strong:rgba(255,255,255,0.16);
+
+    --success:#4ade80;
+    --error:#f87171;
+
+    --ease-out:cubic-bezier(0.16,1,0.3,1);
+    --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+    --ease-apple:cubic-bezier(0.32,0.72,0,1);
+    --ease-smooth:cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter','Segoe UI',Roboto,sans-serif;
+    color:var(--text);
+    background:var(--black);
+    min-height:100dvh;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    letter-spacing:-0.011em;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  body::before{
+    content:'';
+    position:fixed;inset:-20%;
+    background:
+      radial-gradient(900px 620px at 18% -12%, rgba(255,255,255,0.09), transparent 62%),
+      radial-gradient(760px 540px at 88% 4%, rgba(255,255,255,0.05), transparent 58%),
+      radial-gradient(900px 700px at 50% 118%, rgba(255,255,255,0.035), transparent 60%);
+    pointer-events:none;z-index:0;
+    animation:ambient 24s var(--ease-smooth) infinite alternate;
+  }
+  @keyframes ambient{
+    0%{transform:translate3d(0,0,0) scale(1);opacity:1}
+    100%{transform:translate3d(0,-2.5%,0) scale(1.05);opacity:.85}
+  }
+
+  .page{
+    position:relative;z-index:1;
+    min-height:100dvh;
+    display:flex;flex-direction:column;
+    align-items:center;
+    padding:72px 20px 48px;
+    gap:20px;
+    max-width:640px;margin:0 auto;width:100%;
+  }
+
+  .page > *{animation:rise .9s var(--ease-out) both}
+  .page > *:nth-child(1){animation-delay:.05s}
+  .page > *:nth-child(2){animation-delay:.15s}
+  .page > *:nth-child(3){animation-delay:.25s}
+  @keyframes rise{
+    from{opacity:0;transform:translateY(16px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .hero{
+    text-align:center;display:flex;flex-direction:column;
+    gap:14px;max-width:520px;margin-bottom:4px;
+  }
+  .hero h1{
+    font-size:clamp(28px,5vw,42px);font-weight:700;
+    letter-spacing:-0.035em;line-height:1.05;
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    background:linear-gradient(180deg,#ffffff 0%,#a8a8ad 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+  .hero h1 .dot{
+    width:10px;height:10px;border-radius:50%;background:var(--white);
+    animation:glowPulse 2.6s var(--ease-smooth) infinite;flex:none;
+  }
+  @keyframes glowPulse{
+    0%{box-shadow:0 0 0 0 rgba(255,255,255,0.35)}
+    70%{box-shadow:0 0 0 14px rgba(255,255,255,0)}
+    100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}
+  }
+  .hero p{
+    color:var(--muted);font-size:15.5px;line-height:1.6;
+    letter-spacing:-0.005em;
+  }
+  .hero p strong{color:var(--text);font-weight:600}
+
+  .glass-card{
+    width:100%;
+    background:linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
+    border:1px solid var(--stroke);
+    border-radius:22px;
+    backdrop-filter:blur(40px) saturate(140%);
+    -webkit-backdrop-filter:blur(40px) saturate(140%);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.06) inset,
+      0 30px 70px -34px rgba(0,0,0,0.95),
+      0 10px 30px -18px rgba(0,0,0,0.8);
+  }
+
+  .fb-card{
+    padding:28px 26px 24px;
+    display:flex;flex-direction:column;gap:18px;
+  }
+
+  .field{display:flex;flex-direction:column;gap:8px}
+
+  .field-label{
+    font-size:11.5px;font-weight:600;
+    letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--dim);
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+  }
+  .field-label .opt{
+    font-size:10.5px;font-weight:500;
+    letter-spacing:0.06em;color:var(--gray-600);
+    text-transform:none;
+  }
+
+  .type-row{
+    display:flex;gap:6px;flex-wrap:wrap;
+  }
+  .type-chip{
+    font:inherit;font-size:12.5px;font-weight:600;
+    letter-spacing:-0.005em;
+    padding:9px 14px;border-radius:999px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--stroke);
+    color:var(--muted);cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:
+      background .3s var(--ease-out),
+      border-color .3s var(--ease-out),
+      color .3s var(--ease-out),
+      transform .3s var(--ease-apple);
+  }
+  .type-chip .em{font-size:13px;line-height:1;transition:transform .35s var(--ease-spring)}
+  .type-chip:hover{
+    background:rgba(255,255,255,0.09);
+    border-color:var(--stroke-strong);
+    color:var(--text);
+    transform:translateY(-1px);
+  }
+  .type-chip:hover .em{transform:scale(1.15)}
+  .type-chip:active{transform:translateY(0) scale(.96)}
+  .type-chip.active{
+    background:rgba(255,255,255,0.12);
+    border-color:rgba(255,255,255,0.28);
+    color:var(--white);
+    box-shadow:0 0 0 3px rgba(255,255,255,0.04);
+  }
+
+  .input,.textarea{
+    width:100%;
+    background:rgba(0,0,0,0.4);
+    border:1px solid var(--stroke);
+    border-radius:12px;
+    padding:13px 16px;
+    color:var(--white);
+    font:inherit;
+    font-size:14.5px;
+    font-weight:500;
+    letter-spacing:-0.005em;
+    transition:
+      border-color .3s var(--ease-out),
+      box-shadow .3s var(--ease-out),
+      background .3s var(--ease-out);
+  }
+  .input::placeholder,.textarea::placeholder{
+    color:var(--gray-600);font-weight:500;
+  }
+  .input:focus,.textarea:focus{
+    outline:none;
+    border-color:rgba(255,255,255,0.4);
+    background:rgba(0,0,0,0.55);
+    box-shadow:0 0 0 4px rgba(255,255,255,0.07);
+  }
+  .textarea{
+    min-height:130px;
+    resize:vertical;
+    line-height:1.55;
+    font-family:inherit;
+  }
+
+  .char-count{
+    font-size:11px;color:var(--dim);
+    text-align:right;letter-spacing:-0.005em;
+    font-variant-numeric:tabular-nums;
+    transition:color .3s var(--ease-out);
+  }
+  .char-count.warn{color:var(--error)}
+
+  .btn{
+    font:inherit;font-weight:600;font-size:14px;letter-spacing:-0.01em;
+    border:1px solid transparent;border-radius:12px;
+    padding:14px 22px;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    color:var(--text);background:rgba(255,255,255,0.08);border-color:var(--stroke);
+    white-space:nowrap;-webkit-tap-highlight-color:transparent;
+    text-decoration:none;
+    transition:
+      transform .3s var(--ease-apple),
+      background .3s var(--ease-out),
+      box-shadow .3s var(--ease-out),
+      color .3s var(--ease-out),
+      border-color .3s var(--ease-out),
+      opacity .3s var(--ease-out);
+  }
+  .btn:hover{background:rgba(255,255,255,0.12);border-color:var(--stroke-strong)}
+  .btn:active{transform:scale(.965)}
+  .btn:focus-visible{outline:2px solid rgba(255,255,255,0.4);outline-offset:2px}
+  .btn:disabled{opacity:.55;cursor:default;transform:none}
+
+  .btn-primary{
+    background:linear-gradient(180deg,#ffffff 0%,#d6d6db 100%);
+    color:#000;border-color:transparent;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.9) inset,
+      0 12px 30px -12px rgba(255,255,255,0.22),
+      0 4px 12px -6px rgba(0,0,0,0.7);
+  }
+  .btn-primary:hover{
+    background:linear-gradient(180deg,#ffffff 0%,#e8e8ed 100%);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.9) inset,
+      0 16px 40px -14px rgba(255,255,255,0.28),
+      0 6px 16px -8px rgba(0,0,0,0.8);
+  }
+  .btn-lg{width:100%;padding:16px;font-size:15.5px;border-radius:14px}
+
+  .btn .ico{
+    font-size:15px;line-height:1;
+    transition:transform .4s var(--ease-spring);
+  }
+  .btn:hover .ico{transform:scale(1.15) rotate(-6deg)}
+
+  .spinner{
+    width:16px;height:16px;flex:none;
+    border:2px solid rgba(0,0,0,0.2);
+    border-top-color:#000;
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .divider{
+    display:flex;align-items:center;gap:14px;
+    color:var(--dim);
+    font-size:11px;font-weight:600;
+    letter-spacing:0.14em;text-transform:uppercase;
+    margin-top:4px;
+  }
+  .divider::before,.divider::after{
+    content:'';flex:1;height:1px;
+    background:linear-gradient(90deg, transparent, var(--stroke), transparent);
+  }
+
+  .fb-link-card{
+    padding:20px 22px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .fb-link-head{
+    display:flex;align-items:center;gap:10px;
+  }
+  .fb-link-ico{
+    width:34px;height:34px;flex:none;
+    border-radius:10px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--stroke);
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--gray-300);
+  }
+  .fb-link-titles{flex:1;min-width:0}
+  .fb-link-title{
+    font-size:13.5px;font-weight:600;color:var(--white);
+    letter-spacing:-0.01em;
+  }
+  .fb-link-sub{
+    font-size:11.5px;color:var(--dim);font-weight:500;
+    letter-spacing:-0.005em;margin-top:2px;
+  }
+
+  .url-box{
+    display:flex;align-items:center;gap:8px;
+    background:rgba(0,0,0,0.5);
+    border:1px solid var(--stroke);
+    border-radius:11px;
+    padding:8px 8px 8px 14px;
+    transition:border-color .3s var(--ease-out);
+  }
+  .url-box:hover{border-color:var(--stroke-strong)}
+  .url-text{
+    flex:1;min-width:0;
+    font-family:'SF Mono',ui-monospace,Menlo,monospace;
+    font-size:12px;
+    color:var(--gray-300);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    letter-spacing:0;
+    user-select:all;
+  }
+  .url-copy{
+    flex:none;
+    font:inherit;font-size:12px;font-weight:600;
+    letter-spacing:-0.005em;
+    padding:7px 12px;border-radius:8px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid var(--stroke);
+    color:var(--text);cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:
+      background .25s var(--ease-out),
+      border-color .25s var(--ease-out),
+      transform .2s var(--ease-apple);
+  }
+  .url-copy:hover{background:rgba(255,255,255,0.14);border-color:var(--stroke-strong)}
+  .url-copy:active{transform:scale(.94)}
+  .url-copy.ok{
+    background:rgba(74,222,128,0.14);
+    border-color:rgba(74,222,128,0.4);
+    color:var(--success);
+  }
+
+  .toast{
+    position:fixed;
+    left:50%;bottom:24px;
+    transform:translate(-50%, 20px);
+    background:linear-gradient(180deg, rgba(28,28,30,0.96) 0%, rgba(20,20,22,0.96) 100%);
+    border:1px solid var(--stroke-strong);
+    border-radius:14px;
+    padding:12px 18px;
+    display:flex;align-items:center;gap:10px;
+    font-size:13.5px;font-weight:600;
+    letter-spacing:-0.005em;
+    color:var(--text);
+    backdrop-filter:blur(40px) saturate(160%);
+    -webkit-backdrop-filter:blur(40px) saturate(160%);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.08) inset,
+      0 20px 50px -20px rgba(0,0,0,1);
+    z-index:200;
+    opacity:0;pointer-events:none;
+    transition:opacity .4s var(--ease-out), transform .5s var(--ease-apple);
+    max-width:calc(100% - 32px);
+  }
+  .toast.show{opacity:1;transform:translate(-50%, 0)}
+  .toast .dot{
+    width:8px;height:8px;border-radius:50%;flex:none;
+  }
+  .toast.ok .dot{background:var(--success);box-shadow:0 0 0 4px rgba(74,222,128,0.14)}
+  .toast.err .dot{background:var(--error);box-shadow:0 0 0 4px rgba(248,113,113,0.14)}
+
+  .success-box{
+    display:none;
+    flex-direction:column;align-items:center;gap:14px;
+    padding:14px 0 4px;
+    text-align:center;
+  }
+  .success-box.show{
+    display:flex;
+    animation:rise .6s var(--ease-out) both;
+  }
+  .check-circle{
+    width:56px;height:56px;border-radius:50%;
+    background:rgba(74,222,128,0.12);
+    border:1.5px solid rgba(74,222,128,0.4);
+    display:flex;align-items:center;justify-content:center;
+    animation:popIn .6s var(--ease-spring) both;
+  }
+  @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+  .check-circle svg{
+    width:26px;height:26px;
+    stroke:var(--success);stroke-width:3;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  .check-circle svg path{
+    stroke-dasharray:30;
+    stroke-dashoffset:30;
+    animation:draw .55s var(--ease-out) .15s forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .success-title{
+    font-size:17px;font-weight:700;color:var(--white);
+    letter-spacing:-0.02em;
+  }
+  .success-text{
+    font-size:13.5px;line-height:1.6;color:var(--muted);
+    letter-spacing:-0.005em;max-width:340px;
+  }
+
+  .fb-form.hidden{display:none}
+
+  .foot{
+    width:100%;text-align:center;
+    color:var(--dim);font-size:12px;line-height:1.75;
+    padding:8px 4px 0;margin-top:4px;
+  }
+  .foot a{
+    color:var(--muted);text-decoration:none;
+    transition:color .2s var(--ease-out);
+  }
+  .foot a:hover{color:var(--text)}
+
+  @media (max-width:520px){
+    .page{padding:48px 16px 32px;gap:16px}
+    .hero h1{font-size:26px}
+    .hero p{font-size:14.5px}
+    .fb-card{padding:22px 18px 18px;gap:16px}
+    .fb-link-card{padding:16px 18px}
+    .url-text{font-size:11px}
+    .url-copy span.txt{display:none}
+    .url-copy{padding:7px 10px}
+    .type-chip{font-size:12px;padding:8px 12px}
+    .toast{bottom:16px;font-size:13px;padding:11px 15px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms !important;
+      transition-duration:.001ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main class="page">
+
+  <header class="hero">
+    <h1><span class="dot"></span> Enviar feedback</h1>
+    <p>Sua opinião ajuda o <strong>CapimmShare</strong> a melhorar. Conta pra gente o que achou, o que funcionou e o que pode ser melhor.</p>
+  </header>
+
+  <section class="glass-card fb-card" aria-label="Formulário de feedback">
+
+    <form id="fbForm" class="fb-form" novalidate>
+      <div style="display:flex;flex-direction:column;gap:18px">
+
+        <div class="field">
+          <div class="field-label">
+            <span>Tipo de feedback</span>
+          </div>
+          <div class="type-row" id="typeRow" role="radiogroup" aria-label="Tipo de feedback">
+            <button type="button" class="type-chip active" data-type="Sugestão">
+              <span class="em">💡</span> Sugestão
+            </button>
+            <button type="button" class="type-chip" data-type="Bug">
+              <span class="em">🐛</span> Bug
+            </button>
+            <button type="button" class="type-chip" data-type="Elogio">
+              <span class="em">💚</span> Elogio
+            </button>
+            <button type="button" class="type-chip" data-type="Outro">
+              <span class="em">💬</span> Outro
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="fbNome">
+            <span>Seu nome</span>
+            <span class="opt">opcional</span>
+          </label>
+          <input
+            id="fbNome"
+            class="input"
+            type="text"
+            maxlength="60"
+            placeholder="Como podemos te chamar?"
+            autocomplete="nickname"
+            spellcheck="false"
+          >
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="fbContato">
+            <span>Contato</span>
+            <span class="opt">opcional</span>
+          </label>
+          <input
+            id="fbContato"
+            class="input"
+            type="text"
+            maxlength="120"
+            placeholder="Discord, e-mail ou @ (se quiser resposta)"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="fbMsg">
+            <span>Sua mensagem</span>
+            <span class="opt" id="charHint">0 / 1800</span>
+          </label>
+          <textarea
+            id="fbMsg"
+            class="textarea"
+            maxlength="1800"
+            placeholder="Escreva aqui o que você pensa…"
+            spellcheck="true"
+          ></textarea>
+        </div>
+
+        <button id="fbSubmit" class="btn btn-primary btn-lg" type="submit">
+          <span class="ico">🚀</span>
+          <span id="fbSubmitLabel">Enviar feedback</span>
+        </button>
+
+      </div>
+    </form>
+
+    <div id="successBox" class="success-box" role="status" aria-live="polite">
+      <div class="check-circle">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 12.5l5.5 5.5L20 7"/>
+        </svg>
+      </div>
+      <div>
+        <div class="success-title">Feedback enviado!</div>
+        <p class="success-text" style="margin-top:6px">
+          Muito obrigado 💚 &nbsp;— sua mensagem chegou direto para o criador do CapimmShare.
+        </p>
+      </div>
+      <button type="button" id="fbAgain" class="btn" style="margin-top:6px;font-size:13px;padding:10px 18px">
+        <span class="ico">↻</span> Enviar outro
+      </button>
+    </div>
+
+  </section>
+
+  <div class="divider">link de feedback</div>
+
+  <section class="glass-card fb-link-card" aria-label="Link da página">
+    <div class="fb-link-head">
+      <div class="fb-link-ico">🔗</div>
+      <div class="fb-link-titles">
+        <div class="fb-link-title">Link desta página</div>
+        <div class="fb-link-sub">Copie e envie para quem quiser dar feedback</div>
+      </div>
+    </div>
+
+    <div class="url-box">
+      <span class="url-text" id="urlText" title="Link da página">Carregando…</span>
+      <button type="button" class="url-copy" id="urlCopy" title="Copiar link">
+        <span>⧉</span><span class="txt">Copiar</span>
+      </button>
+    </div>
+
+    <a
+      id="openFeedbackLink"
+      class="btn"
+      href="#"
+      target="_blank"
+      rel="noopener"
+      style="font-size:13px;padding:12px"
+    >
+      <span class="ico">↗</span>
+      Abrir link de feedback em nova aba
+    </a>
+  </section>
+
+  <footer class="foot">
+    Feedback enviado diretamente para o <a href="https://capimmshare.lovable.app/" target="_blank" rel="noopener">CapimmShare</a>.<br>
+    Sem intermediários, sem armazenamento local.
+  </footer>
+
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite">
+  <span class="dot"></span>
+  <span id="toastMsg">—</span>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ============================================================
+     CONFIG — WEBHOOK DO DISCORD
+     ============================================================ */
+  const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1554299325507444737/w7MOm_XikPIHIlGd3g8c5j6QlFqO5GSzs3Pds7BxzQRi0WsrVFJ6aU9-agq-rgDDUzJt';
+
+  /* ============================================================
+     REFS
+     ============================================================ */
+  const form      = document.getElementById('fbForm');
+  const typeRow   = document.getElementById('typeRow');
+  const inputNome = document.getElementById('fbNome');
+  const inputCont = document.getElementById('fbContato');
+  const textarea  = document.getElementById('fbMsg');
+  const charHint  = document.getElementById('charHint');
+  const submitBtn = document.getElementById('fbSubmit');
+  const submitLbl = document.getElementById('fbSubmitLabel');
+  const successBox= document.getElementById('successBox');
+  const againBtn  = document.getElementById('fbAgain');
+
+  const urlText   = document.getElementById('urlText');
+  const urlCopy   = document.getElementById('urlCopy');
+  const openLink  = document.getElementById('openFeedbackLink');
+
+  const toast     = document.getElementById('toast');
+  const toastMsg  = document.getElementById('toastMsg');
+
+  /* ============================================================
+     TOAST
+     ============================================================ */
+  let toastTimer = null;
+  function showToast(msg, tipo){
+    toastMsg.textContent = msg;
+    toast.classList.remove('ok','err');
+    toast.classList.add(tipo === 'err' ? 'err' : 'ok', 'show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
+  /* ============================================================
+     TIPO DE FEEDBACK
+     ============================================================ */
+  let tipoAtual = 'Sugestão';
+  typeRow.addEventListener('click', (e) => {
+    const chip = e.target.closest('.type-chip');
+    if (!chip) return;
+    typeRow.querySelectorAll('.type-chip').forEach((c) => c.classList.remove('active'));
+    chip.classList.add('active');
+    tipoAtual = chip.dataset.type || 'Outro';
+  });
+
+  /* ============================================================
+     CONTADOR DE CARACTERES
+     ============================================================ */
+  function atualizarContador(){
+    const len = textarea.value.length;
+    const max = Number(textarea.maxLength) || 1800;
+    charHint.textContent = len + ' / ' + max;
+    charHint.classList.toggle('warn', len > max * 0.9);
+  }
+  textarea.addEventListener('input', atualizarContador);
+  atualizarContador();
+
+  /* ============================================================
+     PAYLOAD — DISCORD COMPONENTS V2
+     ------------------------------------------------------------
+     Estrutura pedida:
+       1. Nome
+       2. Tipo
+       3. Contato
+       ── separador ──
+       4. Mensagem  (destacada no meio)
+       ── separador ──
+       5. Link       (embaixo)
+     ============================================================ */
+
+  // Tipos de componente do Discord V2
+  const C = {
+    CONTAINER: 17,
+    TEXT:      10,
+    SEPARATOR: 14
+  };
+
+  // Flag obrigatória para usar Components V2 em webhooks
+  const FLAG_IS_COMPONENTS_V2 = 1 << 15; // 32768
+
+  function montarPayload(){
+    const nome    = (inputNome.value.trim() || 'Anônimo').slice(0, 60);
+    const contato = inputCont.value.trim() || 'não informado';
+    const msg     = textarea.value.trim();
+    const urlAtual = window.location.href;
+
+    // Cor PRETA (0x000000) — accent do container
+    const PRETO = 0x000000;
+
+    return {
+      username: 'CapimmShare · Feedback',
+      avatar_url: 'https://cdn.discordapp.com/embed/avatars/0.png',
+      flags: FLAG_IS_COMPONENTS_V2,
+      components: [
+        {
+          type: C.CONTAINER,
+          accent_color: PRETO,
+          components: [
+            // Título
+            {
+              type: C.TEXT,
+              content: '## 📨 Novo feedback recebido'
+            },
+
+            // ── 1. Nome ──
+            {
+              type: C.TEXT,
+              content: `**1. Nome**\n${nome}`
+            },
+
+            // ── 2. Tipo ──
+            {
+              type: C.TEXT,
+              content: `**2. Tipo**\n${tipoAtual}`
+            },
+
+            // ── 3. Contato ──
+            {
+              type: C.TEXT,
+              content: `**3. Contato**\n${contato}`
+            },
+
+            // ───── Separador antes da mensagem ─────
+            {
+              type: C.SEPARATOR,
+              divider: true,
+              spacing: 2
+            },
+
+            // ── 4. Mensagem (destacada) ──
+            {
+              type: C.TEXT,
+              content: `### 💬 4. Mensagem\n>>> ${msg}`
+            },
+
+            // ───── Separador depois da mensagem ─────
+            {
+              type: C.SEPARATOR,
+              divider: true,
+              spacing: 2
+            },
+
+            // ── 5. Link (embaixo) ──
+            {
+              type: C.TEXT,
+              content: `**5. Link**\n${urlAtual}`
+            }
+          ]
+        }
+      ]
+    };
+  }
+
+  /* ============================================================
+     ENVIO PARA O WEBHOOK DO DISCORD
+     ============================================================ */
+  async function enviarFeedback(){
+    const msg = textarea.value.trim();
+    if (msg.length < 3){
+      showToast('Escreva um pouco mais antes de enviar 😅', 'err');
+      textarea.focus();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    const originalLabel = submitLbl.textContent;
+    submitLbl.textContent = 'Enviando…';
+    const oldIco = submitBtn.querySelector('.ico');
+    const iconBackup = oldIco ? oldIco.outerHTML : '';
+    if (oldIco) oldIco.outerHTML = '<span class="spinner"></span>';
+
+    try {
+      const res = await fetch(DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(montarPayload())
+      });
+
+      if (!res.ok){
+        const txt = await res.text().catch(() => '');
+        throw new Error('HTTP ' + res.status + (txt ? ' — ' + txt : ''));
+      }
+
+      form.classList.add('hidden');
+      successBox.classList.add('show');
+      showToast('Feedback enviado com sucesso 💚', 'ok');
+    } catch (err){
+      console.error('Erro ao enviar feedback:', err);
+      showToast('Não foi possível enviar. Tente novamente.', 'err');
+    } finally {
+      submitBtn.disabled = false;
+      submitLbl.textContent = originalLabel;
+      const sp = submitBtn.querySelector('.spinner');
+      if (sp && iconBackup) sp.outerHTML = iconBackup;
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    enviarFeedback();
+  });
+
+  againBtn.addEventListener('click', () => {
+    form.reset();
+    tipoAtual = 'Sugestão';
+    typeRow.querySelectorAll('.type-chip').forEach((c, i) => c.classList.toggle('active', i === 0));
+    atualizarContador();
+    successBox.classList.remove('show');
+    form.classList.remove('hidden');
+    inputNome.focus({ preventScroll: true });
+  });
+
+  /* ============================================================
+     LINK DA PÁGINA (pega automaticamente)
+     ============================================================ */
+  function atualizarLink(){
+    const href = window.location.href;
+    urlText.textContent = href;
+    urlText.title = href;
+    openLink.href = href;
+  }
+  atualizarLink();
+  window.addEventListener('popstate', atualizarLink);
+  window.addEventListener('hashchange', atualizarLink);
+
+  urlCopy.addEventListener('click', async () => {
+    const href = window.location.href;
+    let ok = true;
+    try {
+      await navigator.clipboard.writeText(href);
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = href;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); }
+      catch (_) { ok = false; }
+      ta.remove();
+    }
+
+    if (ok){
+      urlCopy.classList.add('ok');
+      const span = urlCopy.querySelector('.txt');
+      const orig = span ? span.textContent : '';
+      if (span) span.textContent = 'Copiado';
+      showToast('Link copiado para a área de transferência', 'ok');
+      clearTimeout(urlCopy._t);
+      urlCopy._t = setTimeout(() => {
+        urlCopy.classList.remove('ok');
+        if (span) span.textContent = orig || 'Copiar';
+      }, 1800);
+    } else {
+      showToast('Não foi possível copiar o link', 'err');
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
