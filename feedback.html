@@ -470,15 +470,9 @@
             { name: '1. Nome',    value: d.nome,    inline: true  },
             { name: '2. Tipo',    value: d.tipo,    inline: true  },
             { name: '3. Contato', value: d.contato, inline: false },
-
-            /* Separador com emoji customizado do Discord */
             { name: '\u200b', value: EMOJI_SEPARADOR, inline: false },
-
             { name: '4. Mensagem', value: '>>> ' + d.msg, inline: false },
-
-            /* Separador com emoji customizado do Discord */
             { name: '\u200b', value: EMOJI_SEPARADOR, inline: false },
-
             { name: '5. Link', value: d.url, inline: false }
           ],
           timestamp: new Date().toISOString(),
