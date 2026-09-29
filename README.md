@@ -1,4 +1,4 @@
 Links: 
 
-1. capimm.lovable.app
-2. capimmm.github.io/CapimmShare
+1. https://capimm.lovable.app
+2. https://capimmm.github.io/CapimmShare
